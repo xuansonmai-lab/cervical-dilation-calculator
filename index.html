@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tính Thời Gian Mở Cổ Tử Cung</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .result-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center">Công Cụ Tính Thời Gian Mở Cổ Tử Cung</h1>
+            <p class="text-center mt-2 text-blue-100">Dựa trên bách phân vị thứ 95 (95th percentile)</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <!-- Input Panel -->
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
+                    📋 Thông tin bệnh nhân
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-3 text-gray-700">
+                            Độ mở cổ tử cung hiện tại:
+                        </label>
+                        <select id="currentDilation" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                            <option value="3">3 cm</option>
+                            <option value="4" selected>4 cm</option>
+                            <option value="5">5 cm</option>
+                            <option value="6">6 cm</option>
+                            <option value="7">7 cm</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-3 text-gray-700">
+                            Độ mở cổ tử cung mục tiêu:
+                        </label>
+                        <select id="targetDilation" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                            <option value="4">4 cm</option>
+                            <option value="5" selected>5 cm</option>
+                            <option value="6">6 cm</option>
+                            <option value="7">7 cm</option>
+                            <option value="8">8 cm</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-3 text-gray-700">
+                            Tính chất sinh nở:
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" name="parity" value="multiparous" checked class="mr-3 text-blue-500">
+                                <span class="font-medium">Con rạ (Multiparous)</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" name="parity" value="nulliparous" class="mr-3 text-blue-500">
+                                <span class="font-medium">Con so (Nulliparous)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-3 text-gray-700">
+                            Loại chuyển dạ:
+                        </label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" name="laborType" value="spontaneous" checked class="mr-3 text-blue-500">
+                                <span class="font-medium">Chuyển dạ tự nhiên</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" name="laborType" value="induction" class="mr-3 text-blue-500">
+                                <span class="font-medium">Khởi phát chuyển dạ</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <input type="radio" name="laborType" value="augmentation" class="mr-3 text-blue-500">
+                                <span class="font-medium">Tăng co tử cung</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateTime()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105">
+                        🧮 Tính toán thời gian
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
+                    📊 Kết quả dự đoán
+                </h2>
+                
+                <div id="results" class="space-y-6">
+                    <div class="result-card text-white p-6 rounded-xl text-center">
+                        <p class="text-sm opacity-90 mb-2">Thời gian dự kiến (95th percentile):</p>
+                        <p id="timeResult" class="text-3xl font-bold">2 giờ 42 phút</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600 mb-1">
+                            <span class="font-medium">Từ:</span> <span id="dilationRange">4 cm → 5 cm</span>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            <span class="font-medium">Điều kiện:</span> <span id="conditionText">con rạ, chuyển dạ tự nhiên</span>
+                        </p>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                        <p class="text-xs text-yellow-800">
+                            <strong>⚠️ Lưu ý quan trọng:</strong> Đây là thời gian ở bách phân vị thứ 95, có nghĩa là 95% các trường hợp sẽ mở nhanh hơn thời gian này. Kết quả chỉ mang tính tham khảo và có thể khác biệt tùy theo từng trường hợp cụ thể.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formula Explanation -->
+        <div class="mt-12 bg-white rounded-xl p-6 card-shadow max-w-4xl mx-auto">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">
+                🧪 Công thức tính toán
+            </h3>
+            <div class="text-sm text-gray-700 space-y-3">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="font-mono text-lg text-center text-blue-800">
+                        <strong>Tổng thời gian = Σ (Thời gian cho mỗi giai đoạn mở 1cm)</strong>
+                    </p>
+                </div>
+                <p><strong>Trong đó thời gian được tra cứu từ bảng dữ liệu dựa trên:</strong></p>
+                <ul class="list-disc list-inside ml-4 space-y-2">
+                    <li>Tính chất sinh nở (con so/con rạ)</li>
+                    <li>Loại chuyển dạ (tự nhiên/khởi phát/tăng co)</li>
+                    <li>Giai đoạn mở cổ tử cung hiện tại</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Công Cụ Tính Thời Gian Mở Cổ Tử Cung. Chỉ mang tính tham khảo y khoa.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dữ liệu từ bảng
+        const dilationData = {
+            '3-4': {
+                'induction-multiparous': 10.2,
+                'augmentation-multiparous': 7.5,
+                'spontaneous-multiparous': 2.3,
+                'induction-nulliparous': 8.1,
+                'augmentation-nulliparous': 6.8,
+                'spontaneous-nulliparous': 2.3
+            },
+            '4-5': {
+                'induction-multiparous': 7.9,
+                'augmentation-multiparous': 8.2,
+                'spontaneous-multiparous': 1.9,
+                'induction-nulliparous': 6.8,
+                'augmentation-nulliparous': 7.6,
+                'spontaneous-nulliparous': 2.7
+            },
+            '5-6': {
+                'induction-multiparous': 4.2,
+                'augmentation-multiparous': 6.0,
+                'spontaneous-multiparous': 1.7,
+                'induction-nulliparous': 4.3,
+                'augmentation-nulliparous': 4.9,
+                'spontaneous-nulliparous': 2.7
+            },
+            '6-7': {
+                'induction-multiparous': 1.8,
+                'augmentation-multiparous': 3.2,
+                'spontaneous-multiparous': 1.6,
+                'induction-nulliparous': 2.8,
+                'augmentation-nulliparous': 3.9,
+                'spontaneous-nulliparous': 2.1
+            },
+            '7-8': {
+                'induction-multiparous': 1.0,
+                'augmentation-multiparous': 1.7,
+                'spontaneous-multiparous': 1.3,
+                'induction-nulliparous': 1.5,
+                'augmentation-nulliparous': 2.2,
+                'spontaneous-nulliparous': 1.7
+            }
+        };
+
+        function calculateTime() {
+            const currentDilation = parseInt(document.getElementById('currentDilation').value);
+            const targetDilation = parseInt(document.getElementById('targetDilation').value);
+            const parity = document.querySelector('input[name="parity"]:checked').value;
+            const laborType = document.querySelector('input[name="laborType"]:checked').value;
+
+            if (currentDilation >= targetDilation) {
+                document.getElementById('timeResult').textContent = 'Lỗi: Độ mở hiện tại phải nhỏ hơn mục tiêu';
+                document.getElementById('timeResult').className = 'text-2xl font-bold text-red-500';
+                return;
+            }
+
+            let totalTime = 0;
+            const key = `${laborType}-${parity}`;
+            
+            for (let i = currentDilation; i < targetDilation; i++) {
+                const rangeKey = `${i}-${i + 1}`;
+                if (dilationData[rangeKey] && dilationData[rangeKey][key]) {
+                    totalTime += dilationData[rangeKey][key];
+                }
+            }
+
+            // Format time
+            const hours = Math.floor(totalTime);
+            const minutes = Math.round((totalTime - hours) * 60);
+            const timeText = `${hours} giờ ${minutes} phút`;
+
+            // Update display
+            document.getElementById('timeResult').textContent = timeText;
+            document.getElementById('timeResult').className = 'text-3xl font-bold';
+            document.getElementById('dilationRange').textContent = `${currentDilation} cm → ${targetDilation} cm`;
+            
+            // Update condition text
+            const parityText = parity === 'multiparous' ? 'con rạ' : 'con so';
+            let laborText = '';
+            switch(laborType) {
+                case 'spontaneous': laborText = 'chuyển dạ tự nhiên'; break;
+                case 'induction': laborText = 'khởi phát chuyển dạ'; break;
+                case 'augmentation': laborText = 'tăng co tử cung'; break;
+            }
+            document.getElementById('conditionText').textContent = `${parityText}, ${laborText}`;
+        }
+
+        // Auto-calculate on page load and input change
+        document.addEventListener('DOMContentLoaded', calculateTime);
+        document.getElementById('currentDilation').addEventListener('change', calculateTime);
+        document.getElementById('targetDilation').addEventListener('change', calculateTime);
+        document.querySelectorAll('input[name="parity"]').forEach(input => {
+            input.addEventListener('change', calculateTime);
+        });
+        document.querySelectorAll('input[name="laborType"]').forEach(input => {
+            input.addEventListener('change', calculateTime);
+        });
+    </script>
+</body>
+</html>
