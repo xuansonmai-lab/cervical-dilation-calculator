@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ Tính Thời Gian Mở Cổ Tử Cung</title>
+    <title>Predictive Tool for Prolonged First Stage of Labor</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
     <style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
@@ -26,7 +26,7 @@
     <header class="gradient-bg text-white py-6">
         <div class="container mx-auto px-4">
             <h1 class="text-3xl font-bold text-center">Công Cụ Tính Thời Gian Mở Cổ Tử Cung</h1>
-            <p class="text-center mt-2 text-blue-100">Dựa trên bách phân vị thứ 95 của thời gian mở CTC</p>
+            <p class="text-center mt-2 text-blue-100">Dựa trên bách phân vị thứ 95 (95th percentile)</p>
         </div>
     </header>
 
@@ -36,13 +36,13 @@
             <!-- Input Panel -->
             <div class="bg-white rounded-xl p-6 card-shadow">
                 <h2 class="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
-                    📋 Thông tin bệnh nhân
+                    📋 Clinical Information
                 </h2>
                 
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium mb-3 text-gray-700">
-                            Độ mở cổ tử cung hiện tại:
+                            Current cervical dilation:
                         </label>
                         <select id="currentDilation" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition">
                             <option value="3">3 cm</option>
@@ -50,12 +50,14 @@
                             <option value="5">5 cm</option>
                             <option value="6">6 cm</option>
                             <option value="7">7 cm</option>
+                            <option value="8">8 cm</option>
+                            <option value="9">9 cm</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-3 text-gray-700">
-                            Độ mở cổ tử cung mục tiêu:
+                            Target cervical dilation:
                         </label>
                         <select id="targetDilation" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition">
                             <option value="4">4 cm</option>
@@ -63,75 +65,73 @@
                             <option value="6">6 cm</option>
                             <option value="7">7 cm</option>
                             <option value="8">8 cm</option>
+                            <option value="9">9 cm</option>
+                            <option value="10">10 cm</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-3 text-gray-700">
-                            Con so hay con rạ?:
+                            Parity:
                         </label>
                         <div class="space-y-3">
                             <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="parity" value="multiparous" checked class="mr-3 text-blue-500">
-                                <span class="font-medium">Con rạ (Multiparous)</span>
+                                <span class="font-medium">Multiparous</span>
                             </label>
                             <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="parity" value="nulliparous" class="mr-3 text-blue-500">
-                                <span class="font-medium">Con so (Nulliparous)</span>
+                                <span class="font-medium">Nulliparous</span>
                             </label>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-3 text-gray-700">
-                            Loại chuyển dạ:
+                            Type of labor:
                         </label>
                         <div class="space-y-3">
                             <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="laborType" value="spontaneous" checked class="mr-3 text-blue-500">
-                                <span class="font-medium">Chuyển dạ tự nhiên</span>
+                                <span class="font-medium">Spontaneous labor</span>
                             </label>
                             <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="laborType" value="induction" class="mr-3 text-blue-500">
-                                <span class="font-medium">Khởi phát chuyển dạ</span>
+                                <span class="font-medium">Induced labor</span>
                             </label>
                             <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="laborType" value="augmentation" class="mr-3 text-blue-500">
-                                <span class="font-medium">Tăng co tử cung</span>
+                                <span class="font-medium">Labor augmentation</span>
                             </label>
                         </div>
                     </div>
-
-                    <button onclick="calculateTime()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105">
-                        🧮 Tính toán thời gian
-                    </button>
                 </div>
             </div>
 
             <!-- Results Panel -->
             <div class="bg-white rounded-xl p-6 card-shadow">
                 <h2 class="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">
-                    📊 Kết quả dự đoán
+                    📊 Predicted time
                 </h2>
                 
                 <div id="results" class="space-y-6">
                     <div class="result-card text-white p-6 rounded-xl text-center">
-                        <p class="text-sm opacity-90 mb-2">Thời gian dự kiến (95th percentile):</p>
-                        <p id="timeResult" class="text-3xl font-bold">2 giờ 42 phút</p>
+                        <p class="text-sm opacity-90 mb-2">95th percentile</p>
+                        <p id="timeResult" class="text-3xl font-bold">2 hours 42 minutes</p>
                     </div>
                     
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <p class="text-sm text-gray-600 mb-1">
-                            <span class="font-medium">Từ:</span> <span id="dilationRange">4 cm → 5 cm</span>
+                            <span class="font-medium">From</span> <span id="dilationRange">4 cm → 5 cm</span>
                         </p>
                         <p class="text-sm text-gray-600">
-                            <span class="font-medium">Điều kiện:</span> <span id="conditionText">con rạ, chuyển dạ tự nhiên</span>
+                            <span class="font-medium">Summary of Clinical Information:</span> <span id="conditionText">Multiparous, Spontaneous labor</span>
                         </p>
                     </div>
 
                     <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
                         <p class="text-xs text-yellow-800">
-                            <strong>⚠️ Note:</strong> Đây là thời gian ở bách phân vị thứ 95, tức là những người này thuộc nhóm mở CTC chậm, top 5% chậm nhất. Tài liệu tham khảo: https://www.uptodate.com/contents/labor-overview-of-normal-and-abnormal-progression 
+                            <strong>⚠️ Important note:</strong> This is the cervical dilation time at the 95th percentile, meaning individuals whose cervical dilation time exceeds this threshold fall into the slowest 5% who still have the potential for vaginal delivery. This number does not determine the diagnosis of arrest of labor but rather helps guide adjustments in management approach
                         </p>
                     </div>
                 </div>
@@ -141,19 +141,17 @@
         <!-- Formula Explanation -->
         <div class="mt-12 bg-white rounded-xl p-6 card-shadow max-w-4xl mx-auto">
             <h3 class="text-xl font-semibold mb-4 text-gray-800">
-                🧪 Công thức tính toán
+                🧪 Scientific rationale and evidence-based medical data
             </h3>
             <div class="text-sm text-gray-700 space-y-3">
                 <div class="bg-blue-50 p-4 rounded-lg">
                     <p class="font-mono text-lg text-center text-blue-800">
-                        <strong>Tổng thời gian = Σ (Thời gian cho mỗi giai đoạn mở 1cm)</strong>
+                        <strong>[References - Uptodate 2025](https://www.uptodate.com/contents/labor-overview-of-normal-and-abnormal-progression)</strong>
                     </p>
                 </div>
-                <p><strong>Trong đó thời gian được tra cứu từ bảng dữ liệu dựa trên:</strong></p>
+                <p><strong>Rationale</strong></p>
                 <ul class="list-disc list-inside ml-4 space-y-2">
-                    <li>Con so hay Con rạ</li>
-                    <li>Vào chuyển dạ tự nhiên hay được khởi phát chuyển dạ hay đang được tăng co)</li>
-                    <li>Độ cổ tử cung hiện tại</li>
+                    <li>Recently, the [World Health Organization (WHO)](https://obgyn.onlinelibrary.wiley.com/doi/10.1111/1471-0528.16694) released updated recommendations in 2018 regarding intrapartum care, introducing several significant changes. Notably, the definition of “slow cervical dilation” is no longer fixed at a threshold such as 1 cm/hour. Instead, WHO advocates for using the 95th percentile time limits based on empirical data to assess cervical progression. Following this approach, I have reviewed and analyzed cervical dilation timelines according to key factors, including parity (nulliparous vs. multiparous), spontaneous labor, labor induction, and labor augmentation.</li>
                 </ul>
             </div>
         </div>
@@ -162,7 +160,7 @@
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2025 Công Cụ Tính Thời Gian Mở Cổ Tử Cung by Mai Xuân Sơn</p>
+            <p>&copy; This tool was created by Dr. Mai Xuan Son. It has not been formally reviewed or validated by experts, so it should be used with caution and not cited as an authoritative source.</p>
         </div>
     </footer>
 
@@ -216,7 +214,7 @@
                 'induction-nulliparous': 1.3,
                 'augmentation-nulliparous': 2.0,
                 'spontaneous-nulliparous': 1.3
-                  },
+            },
             '9-10': {
                 'induction-multiparous': 0.8,
                 'augmentation-multiparous': 1.3,
@@ -224,7 +222,7 @@
                 'induction-nulliparous': 1.9,
                 'augmentation-nulliparous': 2.4,
                 'spontaneous-nulliparous': 1.8
-                
+            }
         };
 
         function calculateTime() {
@@ -252,7 +250,7 @@
             // Format time
             const hours = Math.floor(totalTime);
             const minutes = Math.round((totalTime - hours) * 60);
-            const timeText = `${hours} giờ ${minutes} phút`;
+            const timeText = `${hours} hours ${minutes} minutes`;
 
             // Update display
             document.getElementById('timeResult').textContent = timeText;
@@ -260,12 +258,12 @@
             document.getElementById('dilationRange').textContent = `${currentDilation} cm → ${targetDilation} cm`;
             
             // Update condition text
-            const parityText = parity === 'multiparous' ? 'con rạ' : 'con so';
+            const parityText = parity === 'multiparous' ? 'Multiparous' : 'con so';
             let laborText = '';
             switch(laborType) {
-                case 'spontaneous': laborText = 'chuyển dạ tự nhiên'; break;
-                case 'induction': laborText = 'khởi phát chuyển dạ'; break;
-                case 'augmentation': laborText = 'tăng co tử cung'; break;
+                case 'spontaneous': laborText = 'Spontaneous labor'; break;
+                case 'induction': laborText = 'Induced labor'; break;
+                case 'augmentation': laborText = 'Labor augmentation'; break;
             }
             document.getElementById('conditionText').textContent = `${parityText}, ${laborText}`;
         }
