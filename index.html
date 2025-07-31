@@ -25,8 +25,8 @@
     <!-- Header -->
     <header class="gradient-bg text-white py-6">
         <div class="container mx-auto px-4">
-            <h1 class="text-3xl font-bold text-center">Công Cụ Tính Thời Gian Mở Cổ Tử Cung</h1>
-            <p class="text-center mt-2 text-blue-100">Dựa trên bách phân vị thứ 95 (95th percentile)</p>
+            <h1 class="text-3xl font-bold text-center">Predictive Tool for Prolonged First Stage of Labor</h1>
+            <p class="text-center mt-2 text-blue-100">based on current scientific and medical evidence</p>
         </div>
     </header>
 
@@ -146,12 +146,12 @@
             <div class="text-sm text-gray-700 space-y-3">
                 <div class="bg-blue-50 p-4 rounded-lg">
                     <p class="font-mono text-lg text-center text-blue-800">
-                        <strong>[References - Uptodate 2025](https://www.uptodate.com/contents/labor-overview-of-normal-and-abnormal-progression)</strong>
+                        <strong><a href="https://www.uptodate.com/contents/labor-overview-of-normal-and-abnormal-progression">References - Uptodate 2025</a></strong>
                     </p>
                 </div>
                 <p><strong>Rationale</strong></p>
                 <ul class="list-disc list-inside ml-4 space-y-2">
-                    <li>Recently, the [World Health Organization (WHO)](https://obgyn.onlinelibrary.wiley.com/doi/10.1111/1471-0528.16694) released updated recommendations in 2018 regarding intrapartum care, introducing several significant changes. Notably, the definition of “slow cervical dilation” is no longer fixed at a threshold such as 1 cm/hour. Instead, WHO advocates for using the 95th percentile time limits based on empirical data to assess cervical progression. Following this approach, I have reviewed and analyzed cervical dilation timelines according to key factors, including parity (nulliparous vs. multiparous), spontaneous labor, labor induction, and labor augmentation.</li>
+                    <li>Recently, the World Health Organization (WHO) released updated recommendations in 2018 regarding intrapartum care, introducing several significant changes. Notably, the definition of “slow cervical dilation” is no longer fixed at a threshold such as 1 cm/hour. Instead, WHO advocates for using the 95th percentile time limits based on empirical data to assess cervical progression. Following this approach, I have reviewed and analyzed cervical dilation timelines according to key factors, including parity (nulliparous vs. multiparous), spontaneous labor, labor induction, and labor augmentation.</li>
                 </ul>
             </div>
         </div>
@@ -232,7 +232,7 @@
             const laborType = document.querySelector('input[name="laborType"]:checked').value;
 
             if (currentDilation >= targetDilation) {
-                document.getElementById('timeResult').textContent = 'Lỗi: Độ mở hiện tại phải nhỏ hơn mục tiêu';
+                document.getElementById('timeResult').textContent = 'The current dilation must be less than the target';
                 document.getElementById('timeResult').className = 'text-2xl font-bold text-red-500';
                 return;
             }
@@ -258,7 +258,7 @@
             document.getElementById('dilationRange').textContent = `${currentDilation} cm → ${targetDilation} cm`;
             
             // Update condition text
-            const parityText = parity === 'multiparous' ? 'Multiparous' : 'con so';
+            const parityText = parity === 'multiparous' ? 'Multiparous' : 'Nulliparous';
             let laborText = '';
             switch(laborType) {
                 case 'spontaneous': laborText = 'Spontaneous labor'; break;
